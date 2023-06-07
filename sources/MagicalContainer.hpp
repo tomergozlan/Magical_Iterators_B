@@ -16,6 +16,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
 namespace ariel {
 
@@ -133,9 +134,9 @@ namespace ariel {
 
             const MagicalContainer &container;
             int currentIndex;
-            static int startIndex = 0;
-            static int endIndex = this->container.size() - 1;
-            static int middleIndex = this->cont.size() / 2;
+            int startIndex;
+            int endIndex ;
+            int middleIndex ;
 
         public:
 
@@ -156,9 +157,7 @@ namespace ariel {
             SideCrossIterator(SideCrossIterator &&other)
 
             noexcept : container(other.container), currentIndex(other
-            .currentIndex) ,
-            moveFromStart(other
-            .moveFromStart) {}
+            .currentIndex){}
 
             bool operator==(const SideCrossIterator &other) const;
 

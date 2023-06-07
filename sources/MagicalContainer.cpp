@@ -15,7 +15,7 @@ namespace ariel {
     void MagicalContainer::addElement(int element) {
         bool flag = false;
         for (int i = 0; i < this->size(); ++i) {
-            if (this->elements[i] == element) {
+            if (this->getElement(i) == element) {
                 flag = true;
                 break;
             }
@@ -118,12 +118,12 @@ MagicalContainer::AscendingIterator::~AscendingIterator() {}
 * @param other The AscendingIterator object to be assigned.
 * @return A reference to the current AscendingIterator object after assignment.
 */
-AscendingIterator &
+MagicalContainer::AscendingIterator &
 MagicalContainer::AscendingIterator::operator=(const ariel::MagicalContainer::AscendingIterator &other) {
     if (this == &other) {
         return *this;
     }
-    this->currentIndex = other.currentIndex
+    this->currentIndex = other.currentIndex;
     return *this;
 }
 
@@ -236,7 +236,8 @@ const MagicalContainer &MagicalContainer::AscendingIterator::getContainer() cons
  * @param container The MagicalContainer object to iterate over.
  */
 MagicalContainer::SideCrossIterator::SideCrossIterator(const ariel::MagicalContainer &container) : container(
-        container), currentIndex(0) {}
+        container), currentIndex(0), startIndex(0), middleIndex(this->container.size() / 2), endIndex(
+        this->container.size() - 1) {}
 
 /**
  * @brief Copy constructor  of a SideCrossIterator object.
@@ -244,8 +245,9 @@ MagicalContainer::SideCrossIterator::SideCrossIterator(const ariel::MagicalConta
  * SideCrossIterator object other.
  * @param other The SideCrossIterator object to be copied.
  */
-SideCrossIterator::SideCrossIterator(const ariel::MagicalContainer::SideCrossIterator &other)
-        : container(other.container), currentIndex(other.currentIndex) {}
+MagicalContainer::SideCrossIterator::SideCrossIterator(const ariel::MagicalContainer::SideCrossIterator &other)
+        : container(other.container), currentIndex(other.currentIndex), startIndex(other.startIndex),
+          middleIndex(other.middleIndex), endIndex(other.endIndex) {}
 
 /**
  * @brief Destructor for the SideCrossIterator class.
@@ -259,7 +261,7 @@ MagicalContainer::SideCrossIterator::~SideCrossIterator() {}
  * @param other The SideCrossIterator object to be assigned.
  * @return A reference to the updated SideCrossIterator object.
  */
-SideCrossIterator &
+MagicalContainer::SideCrossIterator &
 MagicalContainer::SideCrossIterator::operator=(const ariel::MagicalContainer::SideCrossIterator &other) {
     if (this == &other) {
         return *this;
@@ -311,13 +313,11 @@ bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &oth
  */
 MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
     if (this->currentIndex == middleIndex) {
-        setCurrentIndex(this->cont.size());
-    }
-    if (this->currentIndex < middleIndex) {
+        setCurrentIndex(this->container.size());
+    } else if (this->currentIndex < middleIndex) {
         setCurrentIndex(endIndex);
         endIndex--;
-    }
-    if (this->currentIndex > middleIndex) {
+    } else {
         startIndex++;
         setCurrentIndex(startIndex);
     }
@@ -347,7 +347,7 @@ MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin()
  */
 MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const {
     MagicalContainer::SideCrossIterator it(this->container);
-    it.currentIndex = container.elements.size();
+    it.currentIndex = container.size();
     return it;
 }
 
@@ -420,11 +420,12 @@ bool MagicalContainer::PrimeIterator::isPrime(int num) const {
  * @param other The PrimeIterator object to be assigned.
  * @return A reference to the current PrimeIterator object after assignment.
  */
-PrimeIterator &MagicalContainer::PrimeIterator::operator=(const ariel::MagicalContainer::PrimeIterator &other) {
+MagicalContainer::PrimeIterator &
+MagicalContainer::PrimeIterator::operator=(const ariel::MagicalContainer::PrimeIterator &other) {
     if (this == &other) {
         return *this;
     }
-    this->currentIndex = other.currentIndex
+    this->currentIndex = other.currentIndex;
     return *this;
 }
 
@@ -469,7 +470,7 @@ bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) cons
  * @return Reference to the updated PrimeIterator object.
  */
 MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
-    currentIndex++;
+    ++currentIndex;
     while (currentIndex < container.size() && !isPrime(container.getElement(currentIndex))) {
         currentIndex++;
     }
@@ -500,7 +501,7 @@ MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin() const {
  */
 MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end() const {
     PrimeIterator it(container);
-    it.currentIndex = container.elements.size();
+    it.currentIndex = container.size();
     return it;
 }
 

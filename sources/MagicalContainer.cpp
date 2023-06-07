@@ -8,7 +8,7 @@
 namespace ariel {
 
 /**
- * Adds an element to the MagicalContainer if it is not already present.
+ * @brief Adds an element to the MagicalContainer if it is not already present.
  * @note The method will ensure that duplicate elements are not added to the vector, and the vector remains sorted after adding the new element.
  * @param element The element to be added.
  */
@@ -50,7 +50,7 @@ namespace ariel {
  * @return The number of elements in the MagicalContainer.
  */
     int MagicalContainer::size() const {
-        return (int)this->elements.size();
+        return (int) this->elements.size();
     }
 
 /**
@@ -94,18 +94,24 @@ namespace ariel {
  */
     MagicalContainer::AscendingIterator::AscendingIterator(ariel::MagicalContainer &container) : container(container),
                                                                                                  currentIndex(0) {}
+
 /**
  * @brief Copy constructor of AscendingIterator object.
  * @param other The AscendingIterator object to copy from.
  */
     MagicalContainer::AscendingIterator::AscendingIterator(const ariel::MagicalContainer::AscendingIterator &other)
 
-    noexcept : container(other.container),currentIndex(other.currentIndex) {}
+    noexcept :
+    container(other
+    .container),
+    currentIndex(other
+    .currentIndex) {
+}
 
 /**
  * @brief Destructor for the AscendingIterator object.
  */
-    MagicalContainer::AscendingIterator::~AscendingIterator() {}
+MagicalContainer::AscendingIterator::~AscendingIterator() {}
 
 /**
 * Assignment operator (=) for the AscendingIterator class.
@@ -145,7 +151,6 @@ MagicalContainer::AscendingIterator::operator!=(const ariel::MagicalContainer::A
  * @param other The AscendingIterator object to compare with.
  * @return true if the currentIndex value of the current object is greater than the currentIndex value of the other object, false otherwise.
  */
-
 bool MagicalContainer::AscendingIterator::operator>(const ariel::MagicalContainer::AscendingIterator &other) const {
     return (this->currentIndex > other.currentIndex);
 }
@@ -223,15 +228,37 @@ const MagicalContainer &MagicalContainer::AscendingIterator::getContainer() cons
 /// Implementation of the SideCrossIterator class.
 
 
-
+/**
+ * @brief Constructor of a SideCrossIterator object.
+ * This constructor initializes a SideCrossIterator object with the specified MagicalContainer
+ * object as the underlying container to iterate over. It sets the current index to 0, indicating
+ * the start of the iteration.
+ * @param container The MagicalContainer object to iterate over.
+ */
 MagicalContainer::SideCrossIterator::SideCrossIterator(const ariel::MagicalContainer &container) : container(
         container), currentIndex(0) {}
 
-MagicalContainer::SideCrossIterator::SideCrossIterator(const ariel::MagicalContainer::SideCrossIterator &other)
-        : container(other.container), currentIndex(other.currentIndex){}
+/**
+ * @brief Copy constructor  of a SideCrossIterator object.
+ * This constructor creates a new SideCrossIterator object by copying the contents of the specified
+ * SideCrossIterator object other.
+ * @param other The SideCrossIterator object to be copied.
+ */
+SideCrossIterator::SideCrossIterator(const ariel::MagicalContainer::SideCrossIterator &other)
+        : container(other.container), currentIndex(other.currentIndex) {}
 
+/**
+ * @brief Destructor for the SideCrossIterator class.
+*/
 MagicalContainer::SideCrossIterator::~SideCrossIterator() {}
 
+/**
+ * @brief Assignment operator (=) for the SideCrossIterator class.
+ * This assignment operator allows for assigning the contents of one SideCrossIterator object to another.
+ * It performs a deep copy of the underlying container and current index from the specified other SideCrossIterator object.
+ * @param other The SideCrossIterator object to be assigned.
+ * @return A reference to the updated SideCrossIterator object.
+ */
 SideCrossIterator &
 MagicalContainer::SideCrossIterator::operator=(const ariel::MagicalContainer::SideCrossIterator &other) {
     if (this == &other) {
@@ -241,63 +268,109 @@ MagicalContainer::SideCrossIterator::operator=(const ariel::MagicalContainer::Si
     return *this;
 }
 
+/**
+ * @brief Overloads the equality comparison operator (==) for the SideCrossIterator class.
+ * @param other The SideCrossIterator object to compare with.
+ * @return true if the currentIndex values are equal, false otherwise.
+ */
 bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
     return this->currentIndex == other.currentIndex;
 }
 
+/**
+ * @brief Overloads the inequality comparison operator (!=) for the SideCrossIterator class.
+ * @param other The SideCrossIterator object to compare with.
+ * @return true if the currentIndex values are not equal, false otherwise.
+ */
 bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {
     return !(*this == other);
 }
 
-
+/**
+ * @brief Overloads the greater than (GT) comparison operator (>) for the SideCrossIterator class.
+ * @param other The SideCrossIterator object to compare with.
+ * @return true if the currentIndex value of the current object is greater than the currentIndex value of the other object, false otherwise.
+ */
 bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
     return (this->currentIndex > other.currentIndex);
-
 }
 
+/**
+ * @brief Overloads the greater than (LT) comparison operator (<) for the SideCrossIterator class.
+ * @param other The SideCrossIterator object to compare with.
+ * @return true if the currentIndex value of the current object is greater than the currentIndex value of the other object, false otherwise.
+ */
 bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
     return (this->currentIndex < other.currentIndex);
 
 }
 
+/**
+ * @brief Overloads the pre-increment operator (++) for the SideCrossIterator class.
+ * @return Reference to the updated SideCrossIterator object.
+ */
 MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
     if (this->currentIndex == middleIndex) {
         setCurrentIndex(this->cont.size());
     }
-    if (this->currentIndex < middleIndex){
+    if (this->currentIndex < middleIndex) {
         setCurrentIndex(endIndex);
         endIndex--;
     }
-    if(this->currentIndex > middleIndex){
+    if (this->currentIndex > middleIndex) {
         startIndex++;
         setCurrentIndex(startIndex);
     }
     return *this;
 }
 
+/**
+ * @brief Overloads the dereference operator (*) for the SideCrossIterator class.
+ * @return The value of the element at the current index.
+ */
 int MagicalContainer::SideCrossIterator::operator*() const {
     return container.getElement(currentIndex);
 }
 
+/**
+ * @brief Returns an iterator pointing to the beginning of the MagicalContainer.
+ * @return An SideCrossIterator object pointing to the beginning of the container.
+ */
 MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() const {
     MagicalContainer::SideCrossIterator beginIter(this->container);
     return beginIter;
 }
 
+/**
+ * @brief Returns an iterator pointing to the end of the iteration over the MagicalContainer.
+ * @return An SideCrossIterator object pointing to the end of the container.
+ */
 MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const {
     MagicalContainer::SideCrossIterator it(this->container);
     it.currentIndex = container.elements.size();
     return it;
 }
 
+/**
+ * @brief Getter of the field current index of the SideCrossIterator class.
+ * @return The current index of the SideCrossIterator.
+*/
 int MagicalContainer::SideCrossIterator::getCurrentIndex() const {
     return this->currentIndex;
 }
 
+/**
+ * @brief Setter the current index of the SideCrossIterator class.
+ * @param index The index to set as the current index of the SideCrossIterator.
+ */
 void MagicalContainer::SideCrossIterator::setCurrentIndex(int index) {
     this->currentIndex = index;
 }
 
+/**
+ * @brief Get the underlying MagicalContainer object of the SideCrossIterator class.
+ * @return A reference to the MagicalContainer object.
+ */
 const MagicalContainer &MagicalContainer::SideCrossIterator::getContainer() const {
     return container;
 }
@@ -307,18 +380,30 @@ const MagicalContainer &MagicalContainer::SideCrossIterator::getContainer() cons
 
 
 
-
+/**
+ * @brief Constructor of a PrimeIterator object for the PrimeIterator class.
+ * @param container The MagicalContainer to iterate over.
+ */
 MagicalContainer::PrimeIterator::PrimeIterator(const ariel::MagicalContainer &container) : container(container),
-                                                                                           currentIndex(0) {
+                                                                                           currentIndex(0) {}
 
-}
-
+/**
+ * @brief Copy constructor of PrimeIterator object.
+ * @param other The PrimeIterator object to copy from.
+ */
 MagicalContainer::PrimeIterator::PrimeIterator(const ariel::MagicalContainer::PrimeIterator &other) : container(
-        other.container), currentIndex(other.currentIndex) {
-}
+        other.container), currentIndex(other.currentIndex) {}
 
+/**
+ * @brief Destructor for the PrimeIterator object.
+ */
 MagicalContainer::PrimeIterator::~PrimeIterator() {}
 
+/**
+ * @brief Check if a number is prime.
+ * @param num The number to check for primality.
+ * @return `true` if the number is prime, `false` otherwise.
+ */
 bool MagicalContainer::PrimeIterator::isPrime(int num) const {
     if (num < 2)
         return false;
@@ -330,6 +415,11 @@ bool MagicalContainer::PrimeIterator::isPrime(int num) const {
     return true;
 }
 
+/**
+ * @brief Assignment operator (=) for the PrimeIterator class.
+ * @param other The PrimeIterator object to be assigned.
+ * @return A reference to the current PrimeIterator object after assignment.
+ */
 PrimeIterator &MagicalContainer::PrimeIterator::operator=(const ariel::MagicalContainer::PrimeIterator &other) {
     if (this == &other) {
         return *this;
@@ -338,22 +428,46 @@ PrimeIterator &MagicalContainer::PrimeIterator::operator=(const ariel::MagicalCo
     return *this;
 }
 
+/**
+ * @brief Overloads the equality comparison operator (==) for the PrimeIterator class.
+ * @param other The PrimeIterator object to compare with.
+ * @return true if the currentIndex values are equal, false otherwise.
+ */
 bool MagicalContainer::PrimeIterator::operator==(const PrimeIterator &other) const {
     return this->currentIndex == other.currentIndex;
 }
 
+/**
+ * @brief Overloads the inequality comparison operator (!=) for the PrimeIterator class.
+ * @param other The PrimeIterator object to compare with.
+ * @return true if the currentIndex values are not equal, false otherwise.
+ */
 bool MagicalContainer::PrimeIterator::operator!=(const PrimeIterator &other) const {
     return !(*this == other);
 }
 
+/**
+ * @brief Overloads the greater than (GT) comparison operator (>) for the PrimeIterator class.
+ * @param other The PrimeIterator object to compare with.
+ * @return true if the currentIndex value of the current object is greater than the currentIndex value of the other object, false otherwise.
+ */
 bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const {
     return (this->currentIndex > other.currentIndex);
 }
 
+/**
+ * @brief Overloads the less than (LT) comparison operator (<) for the PrimeIterator class.
+ * @param other The PrimeIterator object to compare with.
+ * @return true if the currentIndex value of the current object is less than the currentIndex value of the other object, false otherwise.
+ */
 bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const {
     return (this->currentIndex < other.currentIndex);
 }
 
+/**
+ * @brief Overloads the pre-increment operator (++) for the PrimeIterator class.
+ * @return Reference to the updated PrimeIterator object.
+ */
 MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
     currentIndex++;
     while (currentIndex < container.size() && !isPrime(container.getElement(currentIndex))) {
@@ -362,30 +476,54 @@ MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
     return *this;
 }
 
+/**
+ * @brief Overloads the dereference operator (*) for the PrimeIterator class.
+ * @return The value of the element at the current index.
+ */
 int MagicalContainer::PrimeIterator::operator*() const {
     return container.getElement(currentIndex);
 }
 
+/**
+ * @brief Returns an iterator pointing to the beginning of the MagicalContainer.
+ * @return A PrimeIterator object pointing to the beginning of the container.
+ */
 MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin() const {
     PrimeIterator beginIter(container);
     beginIter.setCurrentIndex(0);
     return beginIter;
 }
 
+/**
+ * @brief Returns an iterator pointing to the end of the iteration over the MagicalContainer.
+ * @return A PrimeIterator object pointing to the end of the container.
+ */
 MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end() const {
     PrimeIterator it(container);
     it.currentIndex = container.elements.size();
     return it;
 }
 
+/**
+ * @brief Get the current index of the iterator.
+ * @return The current index of the iterator.
+ */
 int MagicalContainer::PrimeIterator::getCurrentIndex() const {
     return this->currentIndex;
 }
 
+/**
+ * @brief Set the current index of the iterator.
+ * @param index The index to set as the current index of the iterator.
+ */
 void MagicalContainer::PrimeIterator::setCurrentIndex(int index) {
     currentIndex = index;
 }
 
+/**
+ * @brief Get the container being iterated over.
+ * @return A const reference to the MagicalContainer object.
+ */
 const MagicalContainer &MagicalContainer::PrimeIterator::getContainer() const {
     return container;
 }

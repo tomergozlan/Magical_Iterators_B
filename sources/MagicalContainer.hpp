@@ -81,7 +81,7 @@ namespace ariel {
 
             ~AscendingIterator();
 
-            AscendingIterator &operator=(const AscendingIterator &other) ;
+            AscendingIterator &operator=(const AscendingIterator &other);
 
             AscendingIterator(AscendingIterator &&other)
 
@@ -134,7 +134,7 @@ namespace ariel {
             const MagicalContainer &container;
             int currentIndex;
             static int startIndex = 0;
-            static int endIndex = this->container.size()-1;
+            static int endIndex = this->container.size() - 1;
             static int middleIndex = this->cont.size() / 2;
 
         public:
@@ -147,7 +147,9 @@ namespace ariel {
 
             SideCrossIterator &operator=(const SideCrossIterator &other);
 
-            SideCrossIterator &operator=(SideCrossIterator &&other)noexcept {
+            SideCrossIterator &operator=(SideCrossIterator &&other)
+
+            noexcept {
                 return *this;
             }
 

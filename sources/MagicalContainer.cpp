@@ -45,10 +45,10 @@ namespace ariel {
         this->CrossSideIter.clear();
 
         for (int i = 0; i < this->size(); ++i) {
-            this->AscendingIter.emplace_back(&this->elements.at((std::vector<int>::size_type)i));
-            this->CrossSideIter.emplace_back(&this->elements.at((std::vector<int>::size_type)i));
+            this->AscendingIter.emplace_back(&this->elements.at((std::vector<int>::size_type) i));
+            this->CrossSideIter.emplace_back(&this->elements.at((std::vector<int>::size_type) i));
             if (isPrime(this->getElement(i))) {
-                this->PrimeIter.emplace_back(&this->elements.at((std::vector<int>::size_type)i));
+                this->PrimeIter.emplace_back(&this->elements.at((std::vector<int>::size_type) i));
             }
         }
     }
@@ -143,6 +143,7 @@ MagicalContainer::AscendingIterator::~AscendingIterator() {}
 /**
 * Assignment operator (=) for the AscendingIterator class.
 * @param other The AscendingIterator object to be assigned.
+* @throws std::runtime_error if attempting to assign between iterators of different containers.
 * @return A reference to the current AscendingIterator object after assignment.
 */
 MagicalContainer::AscendingIterator &
@@ -199,11 +200,12 @@ bool MagicalContainer::AscendingIterator::operator<(const ariel::MagicalContaine
  * @return The value of the element at the current index.
  */
 int MagicalContainer::AscendingIterator::operator*() const {
-    return *(this->container.AscendingIter[static_cast<std::vector<int*>::size_type>(this->currentIndex)]);
+    return *(this->container.AscendingIter[static_cast<std::vector<int *>::size_type>(this->currentIndex)]);
 }
 
 /**
  * @brief Overloads the pre-increment operator (++) for the AscendingIterator class.
+ * @throws std::runtime_error if the iterator goes out of range.
  * @return Reference to the updated AscendingIterator object.
  */
 MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
@@ -292,6 +294,7 @@ MagicalContainer::SideCrossIterator::~SideCrossIterator() {}
  * This assignment operator allows for assigning the contents of one SideCrossIterator object to another.
  * It performs a deep copy of the underlying container and current index from the specified other SideCrossIterator object.
  * @param other The SideCrossIterator object to be assigned.
+ * @throws std::runtime_error if attempting to assign between iterators of different containers.
  * @return A reference to the updated SideCrossIterator object.
  */
 MagicalContainer::SideCrossIterator &
@@ -345,6 +348,7 @@ bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &oth
 
 /**
  * @brief Overloads the pre-increment operator (++) for the SideCrossIterator class.
+* @throws std::runtime_error if the iterator goes out of range.
  * @return Reference to the updated SideCrossIterator object.
  */
 MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
@@ -368,7 +372,7 @@ MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operat
  * @return The value of the element at the current index.
  */
 int MagicalContainer::SideCrossIterator::operator*() const {
-    return *(this->container.CrossSideIter[static_cast<std::vector<int*>::size_type>(this->currentIndex)]);
+    return *(this->container.CrossSideIter[static_cast<std::vector<int *>::size_type>(this->currentIndex)]);
 }
 
 
@@ -442,6 +446,7 @@ MagicalContainer::PrimeIterator::~PrimeIterator() {}
 /**
  * @brief Assignment operator (=) for the PrimeIterator class.
  * @param other The PrimeIterator object to be assigned.
+ * @throws std::runtime_error if attempting to assign between iterators of different containers.
  * @return A reference to the current PrimeIterator object after assignment.
  */
 MagicalContainer::PrimeIterator &
@@ -494,6 +499,7 @@ bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) cons
 
 /**
  * @brief Overloads the pre-increment operator (++) for the PrimeIterator class.
+ * @throws std::runtime_error if the iterator goes out of range.
  * @return Reference to the updated PrimeIterator object.
  */
 MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
@@ -509,7 +515,7 @@ MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
  * @return The value of the element at the current index.
  */
 int MagicalContainer::PrimeIterator::operator*() const {
-    return *(this->container.PrimeIter[static_cast<std::vector<int*>::size_type>(this->currentIndex)]);
+    return *(this->container.PrimeIter[static_cast<std::vector<int *>::size_type>(this->currentIndex)]);
 }
 
 

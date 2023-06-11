@@ -24,6 +24,11 @@ namespace ariel {
     private:
 
         std::vector<int> elements;
+        std::vector<int*> PrimeIter;
+        std::vector<int*> AscendingIter;
+        std::vector<int*> CrossSideIter;
+
+        bool isPrime(int num) const;
 
     public:
 
@@ -157,7 +162,7 @@ namespace ariel {
             SideCrossIterator(SideCrossIterator &&other)
 
             noexcept : container(other.container), currentIndex(other
-            .currentIndex){}
+            .currentIndex),startIndex(other.startIndex),middleIndex(other.middleIndex),endIndex(other.endIndex){}
 
             bool operator==(const SideCrossIterator &other) const;
 
@@ -197,8 +202,6 @@ namespace ariel {
         private:
             const MagicalContainer &container;
             int currentIndex;
-
-            bool isPrime(int num) const;
 
         public:
             PrimeIterator(const MagicalContainer &container);

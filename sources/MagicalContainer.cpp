@@ -6,6 +6,21 @@
 
 
 namespace ariel {
+/**
+ * @brief Check if a number is prime.
+ * @param num The number to check for primality.
+ * @return `true` if the number is prime, `false` otherwise.
+ */
+    bool MagicalContainer::isPrime(int num) const {
+        if (num < 2)
+            return false;
+
+        for (int i = 2; i <= sqrt(num); ++i) {
+            if (num % i == 0)
+                return false;
+        }
+        return true;
+    }
 
 /**
  * @brief Adds an element to the MagicalContainer if it is not already present.
@@ -23,6 +38,18 @@ namespace ariel {
         if (!flag) {
             this->elements.emplace_back(element);
             std::sort(this->elements.begin(), this->elements.end());
+        }
+
+        this->PrimeIter.clear();
+        this->AscendingIter.clear();
+        this->CrossSideIter.clear();
+
+        for (int i = 0; i < this->size(); ++i) {
+            this->AscendingIter.emplace_back(&this->elements.at((std::vector<int>::size_type)i));
+            this->CrossSideIter.emplace_back(&this->elements.at((std::vector<int>::size_type)i));
+            if (isPrime(this->getElement(i))) {
+                this->PrimeIter.emplace_back(&this->elements.at((std::vector<int>::size_type)i));
+            }
         }
     }
 
@@ -120,6 +147,9 @@ MagicalContainer::AscendingIterator::~AscendingIterator() {}
 */
 MagicalContainer::AscendingIterator &
 MagicalContainer::AscendingIterator::operator=(const ariel::MagicalContainer::AscendingIterator &other) {
+    if (&container != &other.container) {
+        throw std::runtime_error("Error: Invalid assignment between iterators");
+    }
     if (this == &other) {
         return *this;
     }
@@ -161,7 +191,7 @@ bool MagicalContainer::AscendingIterator::operator>(const ariel::MagicalContaine
  * @return true if the currentIndex value of the current object is less than the currentIndex value of the other object, false otherwise.
  */
 bool MagicalContainer::AscendingIterator::operator<(const ariel::MagicalContainer::AscendingIterator &other) const {
-    return (this->currentIndex > other.currentIndex);
+    return (this->currentIndex < other.currentIndex);
 }
 
 /**
@@ -169,7 +199,7 @@ bool MagicalContainer::AscendingIterator::operator<(const ariel::MagicalContaine
  * @return The value of the element at the current index.
  */
 int MagicalContainer::AscendingIterator::operator*() const {
-    return container.getElement(currentIndex);
+    return *(this->container.AscendingIter[static_cast<std::vector<int*>::size_type>(this->currentIndex)]);
 }
 
 /**
@@ -178,6 +208,9 @@ int MagicalContainer::AscendingIterator::operator*() const {
  */
 MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
     ++currentIndex;
+    if (currentIndex > container.size()) {
+        throw std::runtime_error("Error: Iterator out of range");
+    }
     return *this;
 }
 
@@ -196,7 +229,7 @@ MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin()
  */
 MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end() const {
     AscendingIterator it(container);
-    it.currentIndex = container.elements.size();
+    it.currentIndex = container.AscendingIter.size();
     return it;
 }
 
@@ -263,6 +296,9 @@ MagicalContainer::SideCrossIterator::~SideCrossIterator() {}
  */
 MagicalContainer::SideCrossIterator &
 MagicalContainer::SideCrossIterator::operator=(const ariel::MagicalContainer::SideCrossIterator &other) {
+    if (&container != &other.container) {
+        throw std::runtime_error("Error: Invalid assignment between iterators");
+    }
     if (this == &other) {
         return *this;
     }
@@ -312,6 +348,9 @@ bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &oth
  * @return Reference to the updated SideCrossIterator object.
  */
 MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
+    if (currentIndex == container.size()) {
+        throw std::runtime_error("Error: Iterator out of range");
+    }
     if (this->currentIndex == middleIndex) {
         setCurrentIndex(this->container.size());
     } else if (this->currentIndex < middleIndex) {
@@ -329,8 +368,9 @@ MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operat
  * @return The value of the element at the current index.
  */
 int MagicalContainer::SideCrossIterator::operator*() const {
-    return container.getElement(currentIndex);
+    return *(this->container.CrossSideIter[static_cast<std::vector<int*>::size_type>(this->currentIndex)]);
 }
+
 
 /**
  * @brief Returns an iterator pointing to the beginning of the MagicalContainer.
@@ -347,7 +387,7 @@ MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin()
  */
 MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const {
     MagicalContainer::SideCrossIterator it(this->container);
-    it.currentIndex = container.size();
+    it.currentIndex = container.CrossSideIter.size();
     return it;
 }
 
@@ -400,28 +440,15 @@ MagicalContainer::PrimeIterator::PrimeIterator(const ariel::MagicalContainer::Pr
 MagicalContainer::PrimeIterator::~PrimeIterator() {}
 
 /**
- * @brief Check if a number is prime.
- * @param num The number to check for primality.
- * @return `true` if the number is prime, `false` otherwise.
- */
-bool MagicalContainer::PrimeIterator::isPrime(int num) const {
-    if (num < 2)
-        return false;
-
-    for (int i = 2; i <= sqrt(num); ++i) {
-        if (num % i == 0)
-            return false;
-    }
-    return true;
-}
-
-/**
  * @brief Assignment operator (=) for the PrimeIterator class.
  * @param other The PrimeIterator object to be assigned.
  * @return A reference to the current PrimeIterator object after assignment.
  */
 MagicalContainer::PrimeIterator &
 MagicalContainer::PrimeIterator::operator=(const ariel::MagicalContainer::PrimeIterator &other) {
+    if (&container != &other.container) {
+        throw std::runtime_error("Error: Invalid assignment between iterators");
+    }
     if (this == &other) {
         return *this;
     }
@@ -471,8 +498,8 @@ bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) cons
  */
 MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
     ++currentIndex;
-    while (currentIndex < container.size() && !isPrime(container.getElement(currentIndex))) {
-        currentIndex++;
+    if (currentIndex > container.PrimeIter.size()) {
+        throw std::runtime_error("Error: Iterator out of range");
     }
     return *this;
 }
@@ -482,8 +509,9 @@ MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
  * @return The value of the element at the current index.
  */
 int MagicalContainer::PrimeIterator::operator*() const {
-    return container.getElement(currentIndex);
+    return *(this->container.PrimeIter[static_cast<std::vector<int*>::size_type>(this->currentIndex)]);
 }
+
 
 /**
  * @brief Returns an iterator pointing to the beginning of the MagicalContainer.
@@ -501,7 +529,7 @@ MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin() const {
  */
 MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end() const {
     PrimeIterator it(container);
-    it.currentIndex = container.size();
+    it.currentIndex = container.PrimeIter.size();
     return it;
 }
 

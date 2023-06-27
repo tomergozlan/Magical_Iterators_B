@@ -4,7 +4,7 @@
 
 using namespace ariel;
 int main() {
-    /*
+
     // Create a MagicalContainer and add some elements
     MagicalContainer container;
     container.addElement(17);
@@ -47,7 +47,7 @@ int main() {
     return 0;
 
 }
-*/
+/*
 
     MagicalContainer container;
 
@@ -251,3 +251,4 @@ int main() {
     return 0;
 
 }
+*/
